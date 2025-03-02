@@ -8,9 +8,10 @@ from Cryptodome.Hash import SHA256
 @dataclass
 class Algorithm:
     name: str
-    pub_key_size: int
-    priv_key_size: int
-    signature_size: int
+    pub_key_size_bytes: int  # Public key size in bytes
+    priv_key_size_bytes: int  # Private key size in bytes
+    signature_size_min_bytes: int  # Minimum signature size in bytes
+    signature_size_max_bytes: int  # Maximum signature size in bytes
     type: str
     oqs_alg: str = None  # OQS algorithm name
 
@@ -28,36 +29,36 @@ def get_all_algorithms():
     # Post-Quantum Cryptography Algorithms
     pqc_algs = []
     potential_algs = [
-        # NIST Standardized Algorithms
-        ("SLH-DSA-128f (SPHINCS+)", 32, 64, 17088, "PQC", "SPHINCS+-SHA2-128f-simple"),
-        ("SLH-DSA-192f (SPHINCS+)", 48, 96, 35664, "PQC", "SPHINCS+-SHA2-192f-simple"),
-        ("SLH-DSA-256f (SPHINCS+)", 64, 128, 49216, "PQC", "SPHINCS+-SHA2-256f-simple"),
-        ("SLH-DSA-128s (SPHINCS+)", 32, 64, 7856, "PQC", "SPHINCS+-SHA2-128s-simple"),
-        ("SLH-DSA-192s (SPHINCS+)", 48, 96, 16224, "PQC", "SPHINCS+-SHA2-192s-simple"),
-        ("SLH-DSA-256s (SPHINCS+)", 64, 128, 29792, "PQC", "SPHINCS+-SHA2-256s-simple"),
+        # SPHINCS+ variants
+        # f variant
+        ("SLH-DSA-128f (SPHINCS+)", 32, 64, 17088, 17088, "PQC", "SPHINCS+-SHA2-128f-simple"),
+        ("SLH-DSA-192f (SPHINCS+)", 48, 96, 35664, 35664, "PQC", "SPHINCS+-SHA2-192f-simple"),
+        ("SLH-DSA-256f (SPHINCS+)", 64, 128, 49856, 49856, "PQC", "SPHINCS+-SHA2-256f-simple"),
+        # s variant
+        ("SLH-DSA-128s (SPHINCS+)", 32, 64, 7856, 7856, "PQC", "SPHINCS+-SHA2-128s-simple"),
+        ("SLH-DSA-192s (SPHINCS+)", 48, 96, 16224, 16224, "PQC", "SPHINCS+-SHA2-192s-simple"),
+        ("SLH-DSA-256s (SPHINCS+)", 64, 128, 29792, 29792, "PQC", "SPHINCS+-SHA2-256s-simple"),
         
-        ("FN-DSA-512 (Falcon)", 897, 1281, 666, "PQC", "Falcon-512"),
-        ("FN-DSA-1024 (Falcon)", 1793, 2305, 1280, "PQC", "Falcon-1024"),
+        # Falcon variants (signature sizes are variable)
+        ("FN-DSA-512 (Falcon)", 897, 1281, 652, 666, "PQC", "Falcon-512"),
+        ("FN-DSA-1024 (Falcon)", 1793, 2305, 1261, 1280, "PQC", "Falcon-1024"),
         
-        ("ML-DSA-44 (Dilithium)", 1312, 2528, 2420, "PQC", "ML-DSA-44"),
-        ("ML-DSA-65 (Dilithium)", 1952, 4000, 3293, "PQC", "ML-DSA-65"),
-        ("ML-DSA-87 (Dilithium)", 2592, 4864, 4595, "PQC", "ML-DSA-87"),
-        
-        # Additional Algorithms
-        ("XMSS-SHA2-256", 64, 128, 2500, "PQC", "XMSS-SHA2_256"),
-        ("XMSS-SHAKE-256", 64, 128, 2500, "PQC", "XMSS-SHAKE_256"),
+        # Dilithium variants
+        ("ML-DSA-44 (Dilithium)", 1312, 2560, 2420, 2420, "PQC", "ML-DSA-44"),
+        ("ML-DSA-65 (Dilithium)", 1952, 4032, 3309, 3309, "PQC", "ML-DSA-65"),
+        ("ML-DSA-87 (Dilithium)", 2592, 4896, 4627, 4627, "PQC", "ML-DSA-87"),
     ]
     
-    for name, pub_size, priv_size, sig_size, alg_type, oqs_name in potential_algs:
+    for name, pub_size, priv_size, sig_min_size, sig_max_size, alg_type, oqs_name in potential_algs:
         if oqs_name in supported_algs:
-            pqc_algs.append(Algorithm(name, pub_size, priv_size, sig_size, alg_type, oqs_name))
+            pqc_algs.append(Algorithm(name, pub_size, priv_size, sig_min_size, sig_max_size, alg_type, oqs_name))
 
     # Classical Digital Signature Algorithms
     classical_algs = [
-        Algorithm("RSA-2048", 256, 256, 256, "Classical"),
-        Algorithm("RSA-4096", 512, 512, 512, "Classical"),
-        Algorithm("ECDSA-secp256r1", 64, 32, 64, "Classical"),
-        Algorithm("Ed25519", 32, 32, 64, "Classical"),
+        Algorithm("RSA-2048", 256, 256, 256, 256, "Classical"),
+        Algorithm("RSA-4096", 512, 512, 512, 512, "Classical"),
+        Algorithm("ECDSA-secp256r1", 32, 32, 64, 64, "Classical"),
+        Algorithm("Ed25519", 32, 32, 64, 64, "Classical"),
     ]
 
     return pqc_algs + classical_algs
@@ -68,6 +69,14 @@ def generate_keys(algo: Algorithm):
         signer = oqs.Signature(algo.oqs_alg)
         start = time()
         public_key = signer.generate_keypair()
+        secret_key = signer.export_secret_key()
+        
+        # Validate key sizes
+        if len(public_key) != algo.pub_key_size_bytes:
+            raise ValueError(f"Public key size {len(public_key)} bytes doesn't match expected {algo.pub_key_size_bytes} bytes")
+        if len(secret_key) != algo.priv_key_size_bytes:
+            raise ValueError(f"Private key size {len(secret_key)} bytes doesn't match expected {algo.priv_key_size_bytes} bytes")
+            
         end = time()
         return {
             'signer': signer,
@@ -77,7 +86,7 @@ def generate_keys(algo: Algorithm):
     else:
         if algo.name.startswith("RSA"):
             start = time()
-            key = RSA.generate(algo.pub_key_size * 8)
+            key = RSA.generate(algo.pub_key_size_bytes * 8)
             end = time()
             return {
                 'key': key,
@@ -111,11 +120,17 @@ def benchmark_signature(algo: Algorithm, keys, message: bytes, iterations=100):
         for _ in range(iterations):
             signature = signer.sign(message)
         end = time()
+
+        # Verify signature size is within allowed range
+        signature_bytes = len(signature)
+        if not (algo.signature_size_min_bytes <= signature_bytes <= algo.signature_size_max_bytes):
+            raise ValueError(f"Signature size {signature_bytes} bytes is not within expected range of {algo.signature_size_min_bytes}-{algo.signature_size_max_bytes} bytes")
         
         # Time verification
         verify_start = time()
         for _ in range(iterations):
-            signer.verify(message, signature, public_key)
+            if not signer.verify(message, signature, public_key):
+                raise ValueError("Signature verification failed")
         verify_end = time()
         
         return {

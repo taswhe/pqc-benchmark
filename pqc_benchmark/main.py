@@ -11,22 +11,22 @@ def generate_test_data(size):
 def display_comparison_table():
     algorithms = get_all_algorithms()
     
-    # Prepare table data
+    # Prepare table data with correct units
     table_data = []
     for algo in algorithms:
         table_data.append([
             algo.name,
-            f"{algo.pub_key_size} bits",
-            f"{algo.priv_key_size} bits",
-            f"{algo.signature_size} bits",
+            f"{algo.pub_key_size_bytes} bytes",  # Key sizes in bytes
+            f"{algo.priv_key_size_bytes} bytes",  # Key sizes in bytes
+            f"{algo.signature_size_min_bytes}-{algo.signature_size_max_bytes} bytes" if algo.signature_size_min_bytes != algo.signature_size_max_bytes else f"{algo.signature_size_max_bytes} bytes",  # Show range for variable sizes
             algo.type
         ])
     
-    # Display table
+    # Display table with unit labels
     print("Cryptographic Algorithm Comparison")
     print(tabulate(
         table_data,
-        headers=["Algorithm", "Pub Key Size", "Priv Key Size", "Signature Size", "Type"],
+        headers=["Algorithm", "Pub Key Size (bytes)", "Priv Key Size (bytes)", "Signature Size (bytes)", "Type"],
         tablefmt="pretty"
     ))
 
