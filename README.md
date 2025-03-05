@@ -95,3 +95,10 @@ The graphs use:
 ## License
 
 MIT License
+
+## Benchmark Results
+
+View the latest benchmark results:
+- [Full benchmark results](results/results.txt)
+- Performance graph: 
+![Benchmark Performance](results/pqc_benchmark_results.png)
