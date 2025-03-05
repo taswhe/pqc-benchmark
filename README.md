@@ -80,7 +80,6 @@ The graphs use:
   - SLH-DSA (SPHINCS+)
   - FN-DSA (Falcon)
   - ML-DSA (Dilithium)
-  - XMSS
 - Classical Algorithms:
   - RSA
   - ECDSA
