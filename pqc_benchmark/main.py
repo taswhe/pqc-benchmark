@@ -3,10 +3,18 @@ import os
 import matplotlib.pyplot as plt
 from tabulate import tabulate
 from .algorithms import get_all_algorithms, generate_keys, benchmark_signature
+import random
+import string
 
 def generate_test_data(size):
     """Generate test data of specified size"""
     return os.urandom(size)
+
+def generate_test_message(size):
+    """Generate a random string message of specified size"""
+    chars = string.ascii_letters + string.digits + string.punctuation
+    message = ''.join(random.choices(chars, k=size))
+    return message
 
 def display_comparison_table():
     algorithms = get_all_algorithms()
@@ -116,7 +124,13 @@ def display_performance_table(iterations):
         table_data = []
         for algo in algorithms:
             print(f"Testing {algo.name}...", end=" ", flush=True)
-            message = generate_test_data(size)
+            
+            # Use string messages for XMSS algorithms, bytes for others
+            if algo.botan_alg == "XMSS":
+                message = generate_test_message(size)
+            else:
+                message = generate_test_data(size)
+                
             results[algo.name][size] = benchmark_signature(algo, keys[algo.name], message, iterations)
             print("done")
             

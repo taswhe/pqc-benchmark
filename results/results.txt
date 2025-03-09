@@ -1,4 +1,6 @@
 Supported OQS algorithms: ('Dilithium2', 'Dilithium3', 'Dilithium5', 'ML-DSA-44', 'ML-DSA-65', 'ML-DSA-87', 'Falcon-512', 'Falcon-1024', 'Falcon-padded-512', 'Falcon-padded-1024', 'SPHINCS+-SHA2-128f-simple', 'SPHINCS+-SHA2-128s-simple', 'SPHINCS+-SHA2-192f-simple', 'SPHINCS+-SHA2-192s-simple', 'SPHINCS+-SHA2-256f-simple', 'SPHINCS+-SHA2-256s-simple', 'SPHINCS+-SHAKE-128f-simple', 'SPHINCS+-SHAKE-128s-simple', 'SPHINCS+-SHAKE-192f-simple', 'SPHINCS+-SHAKE-192s-simple', 'SPHINCS+-SHAKE-256f-simple', 'SPHINCS+-SHAKE-256s-simple', 'MAYO-1', 'MAYO-2', 'MAYO-3', 'MAYO-5', 'cross-rsdp-128-balanced', 'cross-rsdp-128-fast', 'cross-rsdp-128-small', 'cross-rsdp-192-balanced', 'cross-rsdp-192-fast', 'cross-rsdp-192-small', 'cross-rsdp-256-balanced', 'cross-rsdp-256-fast', 'cross-rsdp-256-small', 'cross-rsdpg-128-balanced', 'cross-rsdpg-128-fast', 'cross-rsdpg-128-small', 'cross-rsdpg-192-balanced', 'cross-rsdpg-192-fast', 'cross-rsdpg-192-small', 'cross-rsdpg-256-balanced', 'cross-rsdpg-256-fast', 'cross-rsdpg-256-small')
+Botan XMSS support detected
+Added XMSS variant: XMSS-SHA2_10_256
 Cryptographic Algorithm Comparison
 +-------------------------+----------------------+-----------------------+------------------------+-----------+
 |        Algorithm        | Pub Key Size (bytes) | Priv Key Size (bytes) | Signature Size (bytes) |   Type    |
@@ -9,34 +11,38 @@ Cryptographic Algorithm Comparison
 | SLH-DSA-128s (SPHINCS+) |       32 bytes       |       64 bytes        |       7856 bytes       |    PQC    |
 | SLH-DSA-192s (SPHINCS+) |       48 bytes       |       96 bytes        |      16224 bytes       |    PQC    |
 | SLH-DSA-256s (SPHINCS+) |       64 bytes       |       128 bytes       |      29792 bytes       |    PQC    |
-|   FN-DSA-512 (Falcon)   |      897 bytes       |      1281 bytes       |     652-666 bytes      |    PQC    |
+|   FN-DSA-512 (Falcon)   |      897 bytes       |      1281 bytes       |     649-666 bytes      |    PQC    |
 |  FN-DSA-1024 (Falcon)   |      1793 bytes      |      2305 bytes       |    1261-1280 bytes     |    PQC    |
 |  ML-DSA-44 (Dilithium)  |      1312 bytes      |      2560 bytes       |       2420 bytes       |    PQC    |
 |  ML-DSA-65 (Dilithium)  |      1952 bytes      |      4032 bytes       |       3309 bytes       |    PQC    |
 |  ML-DSA-87 (Dilithium)  |      2592 bytes      |      4896 bytes       |       4627 bytes       |    PQC    |
+|    XMSS-SHA2_10_256     |       64 bytes       |       132 bytes       |       2500 bytes       |    PQC    |
 |        RSA-2048         |      256 bytes       |       256 bytes       |       256 bytes        | Classical |
 |        RSA-4096         |      512 bytes       |       512 bytes       |       512 bytes        | Classical |
 |     ECDSA-secp256r1     |       32 bytes       |       32 bytes        |        64 bytes        | Classical |
 |         Ed25519         |       32 bytes       |       32 bytes        |        64 bytes        | Classical |
 +-------------------------+----------------------+-----------------------+------------------------+-----------+
 Supported OQS algorithms: ('Dilithium2', 'Dilithium3', 'Dilithium5', 'ML-DSA-44', 'ML-DSA-65', 'ML-DSA-87', 'Falcon-512', 'Falcon-1024', 'Falcon-padded-512', 'Falcon-padded-1024', 'SPHINCS+-SHA2-128f-simple', 'SPHINCS+-SHA2-128s-simple', 'SPHINCS+-SHA2-192f-simple', 'SPHINCS+-SHA2-192s-simple', 'SPHINCS+-SHA2-256f-simple', 'SPHINCS+-SHA2-256s-simple', 'SPHINCS+-SHAKE-128f-simple', 'SPHINCS+-SHAKE-128s-simple', 'SPHINCS+-SHAKE-192f-simple', 'SPHINCS+-SHAKE-192s-simple', 'SPHINCS+-SHAKE-256f-simple', 'SPHINCS+-SHAKE-256s-simple', 'MAYO-1', 'MAYO-2', 'MAYO-3', 'MAYO-5', 'cross-rsdp-128-balanced', 'cross-rsdp-128-fast', 'cross-rsdp-128-small', 'cross-rsdp-192-balanced', 'cross-rsdp-192-fast', 'cross-rsdp-192-small', 'cross-rsdp-256-balanced', 'cross-rsdp-256-fast', 'cross-rsdp-256-small', 'cross-rsdpg-128-balanced', 'cross-rsdpg-128-fast', 'cross-rsdpg-128-small', 'cross-rsdpg-192-balanced', 'cross-rsdpg-192-fast', 'cross-rsdpg-192-small', 'cross-rsdpg-256-balanced', 'cross-rsdpg-256-fast', 'cross-rsdpg-256-small')
+Botan XMSS support detected
+Added XMSS variant: XMSS-SHA2_10_256
 
 Generating keys...
-Generating keys for SLH-DSA-128f (SPHINCS+)... done (4.71 ms)
-Generating keys for SLH-DSA-192f (SPHINCS+)... done (1.85 ms)
-Generating keys for SLH-DSA-256f (SPHINCS+)... done (2.78 ms)
-Generating keys for SLH-DSA-128s (SPHINCS+)... done (29.38 ms)
-Generating keys for SLH-DSA-192s (SPHINCS+)... done (42.95 ms)
-Generating keys for SLH-DSA-256s (SPHINCS+)... done (28.31 ms)
-Generating keys for FN-DSA-512 (Falcon)... done (19.24 ms)
-Generating keys for FN-DSA-1024 (Falcon)... done (25.23 ms)
-Generating keys for ML-DSA-44 (Dilithium)... done (0.87 ms)
-Generating keys for ML-DSA-65 (Dilithium)... done (0.34 ms)
-Generating keys for ML-DSA-87 (Dilithium)... done (0.27 ms)
-Generating keys for RSA-2048... done (1121.22 ms)
-Generating keys for RSA-4096... done (6139.60 ms)
-Generating keys for ECDSA-secp256r1... done (88.85 ms)
-Generating keys for Ed25519... done (41.17 ms)
+Generating keys for SLH-DSA-128f (SPHINCS+)... done (3.09 ms)
+Generating keys for SLH-DSA-192f (SPHINCS+)... done (1.44 ms)
+Generating keys for SLH-DSA-256f (SPHINCS+)... done (3.46 ms)
+Generating keys for SLH-DSA-128s (SPHINCS+)... done (40.29 ms)
+Generating keys for SLH-DSA-192s (SPHINCS+)... done (77.58 ms)
+Generating keys for SLH-DSA-256s (SPHINCS+)... done (47.27 ms)
+Generating keys for FN-DSA-512 (Falcon)... done (10.82 ms)
+Generating keys for FN-DSA-1024 (Falcon)... done (31.53 ms)
+Generating keys for ML-DSA-44 (Dilithium)... done (0.34 ms)
+Generating keys for ML-DSA-65 (Dilithium)... done (0.40 ms)
+Generating keys for ML-DSA-87 (Dilithium)... done (0.46 ms)
+Generating keys for XMSS-SHA2_10_256... done (1642.68 ms)
+Generating keys for RSA-2048... done (2457.37 ms)
+Generating keys for RSA-4096... done (30098.43 ms)
+Generating keys for ECDSA-secp256r1... done (129.09 ms)
+Generating keys for Ed25519... done (45.16 ms)
 
 Performance Benchmarking (times in milliseconds, iterations=10)
 
@@ -44,21 +50,22 @@ Key Generation Times
 +-------------------------+------------------+
 |        Algorithm        | KeyGen Time (ms) |
 +-------------------------+------------------+
-| SLH-DSA-128f (SPHINCS+) |       4.71       |
-| SLH-DSA-192f (SPHINCS+) |       1.85       |
-| SLH-DSA-256f (SPHINCS+) |       2.78       |
-| SLH-DSA-128s (SPHINCS+) |      29.38       |
-| SLH-DSA-192s (SPHINCS+) |      42.95       |
-| SLH-DSA-256s (SPHINCS+) |      28.31       |
-|   FN-DSA-512 (Falcon)   |      19.24       |
-|  FN-DSA-1024 (Falcon)   |      25.23       |
-|  ML-DSA-44 (Dilithium)  |       0.87       |
-|  ML-DSA-65 (Dilithium)  |       0.34       |
-|  ML-DSA-87 (Dilithium)  |       0.27       |
-|        RSA-2048         |     1121.22      |
-|        RSA-4096         |     6139.60      |
-|     ECDSA-secp256r1     |      88.85       |
-|         Ed25519         |      41.17       |
+| SLH-DSA-128f (SPHINCS+) |       3.09       |
+| SLH-DSA-192f (SPHINCS+) |       1.44       |
+| SLH-DSA-256f (SPHINCS+) |       3.46       |
+| SLH-DSA-128s (SPHINCS+) |      40.29       |
+| SLH-DSA-192s (SPHINCS+) |      77.58       |
+| SLH-DSA-256s (SPHINCS+) |      47.27       |
+|   FN-DSA-512 (Falcon)   |      10.82       |
+|  FN-DSA-1024 (Falcon)   |      31.53       |
+|  ML-DSA-44 (Dilithium)  |       0.34       |
+|  ML-DSA-65 (Dilithium)  |       0.40       |
+|  ML-DSA-87 (Dilithium)  |       0.46       |
+|    XMSS-SHA2_10_256     |     1642.68      |
+|        RSA-2048         |     2457.37      |
+|        RSA-4096         |     30098.43     |
+|     ECDSA-secp256r1     |      129.09      |
+|         Ed25519         |      45.16       |
 +-------------------------+------------------+
 
 Message Size: 0 bytes
@@ -73,6 +80,7 @@ Testing FN-DSA-1024 (Falcon)... done
 Testing ML-DSA-44 (Dilithium)... done
 Testing ML-DSA-65 (Dilithium)... done
 Testing ML-DSA-87 (Dilithium)... done
+Testing XMSS-SHA2_10_256... done
 Testing RSA-2048... done
 Testing RSA-4096... done
 Testing ECDSA-secp256r1... done
@@ -80,21 +88,22 @@ Testing Ed25519... done
 +-------------------------+----------------+------------------+
 |        Algorithm        | Sign Time (ms) | Verify Time (ms) |
 +-------------------------+----------------+------------------+
-| SLH-DSA-128f (SPHINCS+) |     10.09      |       0.92       |
-| SLH-DSA-192f (SPHINCS+) |     21.21      |       1.40       |
-| SLH-DSA-256f (SPHINCS+) |     36.51      |       1.38       |
-| SLH-DSA-128s (SPHINCS+) |     209.80     |       0.36       |
-| SLH-DSA-192s (SPHINCS+) |     460.72     |       0.78       |
-| SLH-DSA-256s (SPHINCS+) |     437.59     |       0.73       |
-|   FN-DSA-512 (Falcon)   |      0.31      |       0.07       |
-|  FN-DSA-1024 (Falcon)   |      0.62      |       0.13       |
-|  ML-DSA-44 (Dilithium)  |      0.08      |       0.04       |
-|  ML-DSA-65 (Dilithium)  |      0.15      |       0.06       |
-|  ML-DSA-87 (Dilithium)  |      0.23      |       0.09       |
-|        RSA-2048         |      1.89      |       0.47       |
-|        RSA-4096         |      9.40      |       0.97       |
-|     ECDSA-secp256r1     |      0.99      |       2.13       |
-|         Ed25519         |      0.78      |       2.40       |
+| SLH-DSA-128f (SPHINCS+) |     16.43      |       1.36       |
+| SLH-DSA-192f (SPHINCS+) |     24.26      |       1.69       |
+| SLH-DSA-256f (SPHINCS+) |     85.40      |       2.87       |
+| SLH-DSA-128s (SPHINCS+) |     699.81     |       0.74       |
+| SLH-DSA-192s (SPHINCS+) |    1501.81     |       5.30       |
+| SLH-DSA-256s (SPHINCS+) |    2554.49     |       2.48       |
+|   FN-DSA-512 (Falcon)   |      1.02      |       0.23       |
+|  FN-DSA-1024 (Falcon)   |      2.31      |       0.47       |
+|  ML-DSA-44 (Dilithium)  |      1.10      |       0.18       |
+|  ML-DSA-65 (Dilithium)  |      0.63      |       0.40       |
+|  ML-DSA-87 (Dilithium)  |      0.70      |       0.32       |
+|    XMSS-SHA2_10_256     |    3291.24     |       3.99       |
+|        RSA-2048         |     10.08      |       2.55       |
+|        RSA-4096         |     86.38      |      11.31       |
+|     ECDSA-secp256r1     |     11.97      |      19.46       |
+|         Ed25519         |      7.78      |      21.21       |
 +-------------------------+----------------+------------------+
 
 Message Size: 1024 bytes
@@ -109,6 +118,7 @@ Testing FN-DSA-1024 (Falcon)... done
 Testing ML-DSA-44 (Dilithium)... done
 Testing ML-DSA-65 (Dilithium)... done
 Testing ML-DSA-87 (Dilithium)... done
+Testing XMSS-SHA2_10_256... done
 Testing RSA-2048... done
 Testing RSA-4096... done
 Testing ECDSA-secp256r1... done
@@ -116,21 +126,22 @@ Testing Ed25519... done
 +-------------------------+----------------+------------------+
 |        Algorithm        | Sign Time (ms) | Verify Time (ms) |
 +-------------------------+----------------+------------------+
-| SLH-DSA-128f (SPHINCS+) |     11.13      |       1.15       |
-| SLH-DSA-192f (SPHINCS+) |     18.24      |       1.29       |
-| SLH-DSA-256f (SPHINCS+) |     36.29      |       1.31       |
-| SLH-DSA-128s (SPHINCS+) |     216.36     |       0.36       |
-| SLH-DSA-192s (SPHINCS+) |     397.06     |       0.53       |
-| SLH-DSA-256s (SPHINCS+) |     522.32     |       0.73       |
-|   FN-DSA-512 (Falcon)   |      0.31      |       0.07       |
-|  FN-DSA-1024 (Falcon)   |      0.60      |       0.12       |
-|  ML-DSA-44 (Dilithium)  |      0.10      |       0.04       |
-|  ML-DSA-65 (Dilithium)  |      0.18      |       0.06       |
-|  ML-DSA-87 (Dilithium)  |      0.22      |       0.09       |
-|        RSA-2048         |      1.86      |       0.47       |
-|        RSA-4096         |      9.28      |       0.97       |
-|     ECDSA-secp256r1     |      0.85      |       1.94       |
-|         Ed25519         |      0.77      |       2.23       |
+| SLH-DSA-128f (SPHINCS+) |     58.64      |       5.10       |
+| SLH-DSA-192f (SPHINCS+) |     84.12      |      13.04       |
+| SLH-DSA-256f (SPHINCS+) |     242.67     |      10.48       |
+| SLH-DSA-128s (SPHINCS+) |     803.31     |       1.93       |
+| SLH-DSA-192s (SPHINCS+) |    2381.88     |       3.81       |
+| SLH-DSA-256s (SPHINCS+) |    1941.67     |       6.38       |
+|   FN-DSA-512 (Falcon)   |      2.66      |       0.40       |
+|  FN-DSA-1024 (Falcon)   |      7.60      |       1.21       |
+|  ML-DSA-44 (Dilithium)  |      1.78      |       0.24       |
+|  ML-DSA-65 (Dilithium)  |      1.82      |       1.28       |
+|  ML-DSA-87 (Dilithium)  |      1.13      |       1.05       |
+|    XMSS-SHA2_10_256     |    4586.72     |      10.81       |
+|        RSA-2048         |     18.01      |       1.87       |
+|        RSA-4096         |     78.82      |       9.48       |
+|     ECDSA-secp256r1     |      8.60      |      13.76       |
+|         Ed25519         |      9.98      |      28.61       |
 +-------------------------+----------------+------------------+
 
 Message Size: 10240 bytes
@@ -145,6 +156,7 @@ Testing FN-DSA-1024 (Falcon)... done
 Testing ML-DSA-44 (Dilithium)... done
 Testing ML-DSA-65 (Dilithium)... done
 Testing ML-DSA-87 (Dilithium)... done
+Testing XMSS-SHA2_10_256... done
 Testing RSA-2048... done
 Testing RSA-4096... done
 Testing ECDSA-secp256r1... done
@@ -152,21 +164,22 @@ Testing Ed25519... done
 +-------------------------+----------------+------------------+
 |        Algorithm        | Sign Time (ms) | Verify Time (ms) |
 +-------------------------+----------------+------------------+
-| SLH-DSA-128f (SPHINCS+) |     10.99      |       1.00       |
-| SLH-DSA-192f (SPHINCS+) |     18.18      |       1.32       |
-| SLH-DSA-256f (SPHINCS+) |     44.52      |       1.59       |
-| SLH-DSA-128s (SPHINCS+) |     220.65     |       0.39       |
-| SLH-DSA-192s (SPHINCS+) |     388.56     |       0.60       |
-| SLH-DSA-256s (SPHINCS+) |     380.23     |       1.11       |
-|   FN-DSA-512 (Falcon)   |      0.54      |       0.14       |
-|  FN-DSA-1024 (Falcon)   |      1.21      |       0.35       |
-|  ML-DSA-44 (Dilithium)  |      0.35      |       0.11       |
-|  ML-DSA-65 (Dilithium)  |      0.35      |       0.14       |
-|  ML-DSA-87 (Dilithium)  |      0.35      |       0.17       |
-|        RSA-2048         |      3.47      |       0.74       |
-|        RSA-4096         |     14.15      |       1.64       |
-|     ECDSA-secp256r1     |      1.51      |       3.06       |
-|         Ed25519         |      1.41      |       4.65       |
+| SLH-DSA-128f (SPHINCS+) |     74.87      |       9.25       |
+| SLH-DSA-192f (SPHINCS+) |     178.81     |       7.16       |
+| SLH-DSA-256f (SPHINCS+) |     366.09     |      17.37       |
+| SLH-DSA-128s (SPHINCS+) |    1628.30     |       1.20       |
+| SLH-DSA-192s (SPHINCS+) |    1685.76     |       1.75       |
+| SLH-DSA-256s (SPHINCS+) |    1390.83     |       8.99       |
+|   FN-DSA-512 (Falcon)   |      3.32      |       1.09       |
+|  FN-DSA-1024 (Falcon)   |      7.24      |       1.68       |
+|  ML-DSA-44 (Dilithium)  |      1.74      |       1.09       |
+|  ML-DSA-65 (Dilithium)  |      2.30      |       0.47       |
+|  ML-DSA-87 (Dilithium)  |      2.23      |       1.59       |
+|    XMSS-SHA2_10_256     |    4007.37     |       5.64       |
+|        RSA-2048         |      9.48      |       1.54       |
+|        RSA-4096         |     22.33      |       2.14       |
+|     ECDSA-secp256r1     |      4.44      |       9.61       |
+|         Ed25519         |      7.37      |      13.85       |
 +-------------------------+----------------+------------------+
 
 Message Size: 102400 bytes
@@ -181,6 +194,7 @@ Testing FN-DSA-1024 (Falcon)... done
 Testing ML-DSA-44 (Dilithium)... done
 Testing ML-DSA-65 (Dilithium)... done
 Testing ML-DSA-87 (Dilithium)... done
+Testing XMSS-SHA2_10_256... done
 Testing RSA-2048... done
 Testing RSA-4096... done
 Testing ECDSA-secp256r1... done
@@ -188,21 +202,22 @@ Testing Ed25519... done
 +-------------------------+----------------+------------------+
 |        Algorithm        | Sign Time (ms) | Verify Time (ms) |
 +-------------------------+----------------+------------------+
-| SLH-DSA-128f (SPHINCS+) |     17.60      |       1.94       |
-| SLH-DSA-192f (SPHINCS+) |     29.27      |       2.10       |
-| SLH-DSA-256f (SPHINCS+) |     54.71      |       2.27       |
-| SLH-DSA-128s (SPHINCS+) |     236.67     |       0.63       |
-| SLH-DSA-192s (SPHINCS+) |     397.88     |       0.73       |
-| SLH-DSA-256s (SPHINCS+) |     367.66     |       0.92       |
-|   FN-DSA-512 (Falcon)   |      0.62      |       0.36       |
-|  FN-DSA-1024 (Falcon)   |      0.94      |       0.45       |
-|  ML-DSA-44 (Dilithium)  |      0.43      |       0.33       |
-|  ML-DSA-65 (Dilithium)  |      0.42      |       0.36       |
-|  ML-DSA-87 (Dilithium)  |      0.50      |       0.39       |
-|        RSA-2048         |      1.89      |       0.51       |
-|        RSA-4096         |      9.74      |       1.03       |
-|     ECDSA-secp256r1     |      0.89      |       2.01       |
-|         Ed25519         |      1.62      |       2.79       |
+| SLH-DSA-128f (SPHINCS+) |     45.46      |       6.34       |
+| SLH-DSA-192f (SPHINCS+) |     98.67      |       5.59       |
+| SLH-DSA-256f (SPHINCS+) |     129.09     |       5.65       |
+| SLH-DSA-128s (SPHINCS+) |     663.99     |       1.45       |
+| SLH-DSA-192s (SPHINCS+) |    1625.40     |       1.92       |
+| SLH-DSA-256s (SPHINCS+) |    1029.48     |       2.90       |
+|   FN-DSA-512 (Falcon)   |      1.73      |       0.74       |
+|  FN-DSA-1024 (Falcon)   |      2.90      |       1.37       |
+|  ML-DSA-44 (Dilithium)  |      1.28      |       1.07       |
+|  ML-DSA-65 (Dilithium)  |      2.19      |       1.23       |
+|  ML-DSA-87 (Dilithium)  |      1.57      |       1.43       |
+|    XMSS-SHA2_10_256     |    2953.89     |      11.25       |
+|        RSA-2048         |     15.53      |       3.11       |
+|        RSA-4096         |     60.20      |       6.35       |
+|     ECDSA-secp256r1     |      4.33      |       8.86       |
+|         Ed25519         |     12.52      |      22.31       |
 +-------------------------+----------------+------------------+
 
 Message Size: 1048576 bytes
@@ -217,6 +232,7 @@ Testing FN-DSA-1024 (Falcon)... done
 Testing ML-DSA-44 (Dilithium)... done
 Testing ML-DSA-65 (Dilithium)... done
 Testing ML-DSA-87 (Dilithium)... done
+Testing XMSS-SHA2_10_256... done
 Testing RSA-2048... done
 Testing RSA-4096... done
 Testing ECDSA-secp256r1... done
@@ -224,21 +240,22 @@ Testing Ed25519... done
 +-------------------------+----------------+------------------+
 |        Algorithm        | Sign Time (ms) | Verify Time (ms) |
 +-------------------------+----------------+------------------+
-| SLH-DSA-128f (SPHINCS+) |     17.68      |       4.15       |
-| SLH-DSA-192f (SPHINCS+) |     22.58      |       3.45       |
-| SLH-DSA-256f (SPHINCS+) |     41.90      |       3.23       |
-| SLH-DSA-128s (SPHINCS+) |     217.86     |       3.27       |
-| SLH-DSA-192s (SPHINCS+) |     390.93     |       2.51       |
-| SLH-DSA-256s (SPHINCS+) |     567.45     |       3.30       |
-|   FN-DSA-512 (Falcon)   |      5.34      |       4.39       |
-|  FN-DSA-1024 (Falcon)   |      5.64      |       5.03       |
-|  ML-DSA-44 (Dilithium)  |      5.18      |       5.25       |
-|  ML-DSA-65 (Dilithium)  |      4.89      |       5.02       |
-|  ML-DSA-87 (Dilithium)  |      5.30      |       5.02       |
-|        RSA-2048         |      3.45      |       0.78       |
-|        RSA-4096         |     14.46      |       1.51       |
-|     ECDSA-secp256r1     |      1.47      |       3.88       |
-|         Ed25519         |     13.81      |       9.58       |
+| SLH-DSA-128f (SPHINCS+) |     103.57     |      27.97       |
+| SLH-DSA-192f (SPHINCS+) |     149.34     |      13.94       |
+| SLH-DSA-256f (SPHINCS+) |     188.25     |       8.64       |
+| SLH-DSA-128s (SPHINCS+) |     946.87     |      13.15       |
+| SLH-DSA-192s (SPHINCS+) |    1005.51     |       2.97       |
+| SLH-DSA-256s (SPHINCS+) |     857.14     |      10.39       |
+|   FN-DSA-512 (Falcon)   |     17.68      |      19.00       |
+|  FN-DSA-1024 (Falcon)   |     19.15      |      12.05       |
+|  ML-DSA-44 (Dilithium)  |     10.11      |      11.41       |
+|  ML-DSA-65 (Dilithium)  |      8.55      |      10.04       |
+|  ML-DSA-87 (Dilithium)  |     10.64      |       9.46       |
+|    XMSS-SHA2_10_256     |    3332.14     |      31.59       |
+|        RSA-2048         |      7.98      |       1.84       |
+|        RSA-4096         |     46.32      |       6.30       |
+|     ECDSA-secp256r1     |      3.86      |       8.38       |
+|         Ed25519         |     29.53      |      19.21       |
 +-------------------------+----------------+------------------+
 
 Graphs saved as pqc_benchmark_results.png

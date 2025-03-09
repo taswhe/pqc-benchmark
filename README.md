@@ -43,6 +43,21 @@ pip install .
 cd ..
 ```
 
+6. Build and install Botan 3 (for XMSS support):
+```bash
+git clone https://github.com/randombit/botan.git
+cd botan
+
+# Linux/WSL optimized build:
+python3 configure.py --prefix=/usr/local --enable-module=xmss \
+ --with-python-versions=3 --with-zlib --with-bzip2 \
+ --cc=clang --cc-min-version=11.0 \
+ --cxxflags="-O3 -march=native -flto" --ldflags="-flto" \
+ --lto-cxxflags-to-ldflags --build-targets="shared,cli,tests"
+ make -j$(nproc)
+ sudo make install
+'''
+
 ## Usage
 
 Run the benchmarking tool:
@@ -80,6 +95,7 @@ The graphs use:
   - SLH-DSA (SPHINCS+)
   - FN-DSA (Falcon)
   - ML-DSA (Dilithium)
+  - XMSS (via Botan3)
 - Classical Algorithms:
   - RSA
   - ECDSA
@@ -101,3 +117,8 @@ View the latest benchmark results:
 - [Full benchmark results](results/results.txt)
 - Performance graph: 
 ![Benchmark Performance](results/pqc_benchmark_results.png)
+
+Note: XMSS is supposed to be more efficient than SLH-DSA. However in our test, it isn't.
+This could be because we are using Botan3 for XMSS and liboqs for SLH-DSA.
+I am not sure if Botan3's XMSS is optimized or not. It might be focusing on correctness.
+Given that XMSS has not been selected for FIPS, perhaps less attention was given to it.

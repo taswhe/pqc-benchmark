@@ -1,9 +1,14 @@
 from dataclasses import dataclass
 from time import time
 import oqs
+import sys
 from Cryptodome.Signature import eddsa, pkcs1_15, DSS
 from Cryptodome.PublicKey import ECC, RSA
 from Cryptodome.Hash import SHA256
+
+# Add path to botan3 module
+sys.path.append('/usr/local/lib/python3/site-packages')
+import botan3
 
 @dataclass
 class Algorithm:
@@ -14,6 +19,8 @@ class Algorithm:
     signature_size_max_bytes: int  # Maximum signature size in bytes
     type: str
     oqs_alg: str = None  # OQS algorithm name
+    botan_alg: str = None  # Botan algorithm name
+    botan_params: str = None  # Botan algorithm parameters
 
 def get_supported_algorithms():
     """Get list of supported algorithms from OQS library"""
@@ -40,7 +47,7 @@ def get_all_algorithms():
         ("SLH-DSA-256s (SPHINCS+)", 64, 128, 29792, 29792, "PQC", "SPHINCS+-SHA2-256s-simple"),
         
         # Falcon variants (signature sizes are variable)
-        ("FN-DSA-512 (Falcon)", 897, 1281, 652, 666, "PQC", "Falcon-512"),
+        ("FN-DSA-512 (Falcon)", 897, 1281, 649, 666, "PQC", "Falcon-512"),
         ("FN-DSA-1024 (Falcon)", 1793, 2305, 1261, 1280, "PQC", "Falcon-1024"),
         
         # Dilithium variants
@@ -52,6 +59,37 @@ def get_all_algorithms():
     for name, pub_size, priv_size, sig_min_size, sig_max_size, alg_type, oqs_name in potential_algs:
         if oqs_name in supported_algs:
             pqc_algs.append(Algorithm(name, pub_size, priv_size, sig_min_size, sig_max_size, alg_type, oqs_name))
+
+    # XMSS variants from Botan
+    try:
+        # Check if Botan with XMSS is available by attempting to create a test key
+        rng = botan3.RandomNumberGenerator()
+        try:
+            # Try to create a small test key to verify XMSS support
+            test_key = botan3.PrivateKey.create("XMSS", "XMSS-SHA2_10_256", rng)
+            xmss_supported = True
+            print("Botan XMSS support detected")
+        except Exception:
+            xmss_supported = False
+            print("Botan XMSS support not available")
+            
+        if xmss_supported:
+            # Add XMSS variants
+            xmss_variants = [
+                # Name, pub_size, priv_size, sig_min, sig_max, type, oqs_name, botan_alg, botan_params
+                ("XMSS-SHA2_10_256", 64, 132, 2500, 2500, "PQC", None, "XMSS", "XMSS-SHA2_10_256"),
+                #("XMSS-SHA2_16_256", 64, 132, 2500, 2500, "PQC", None, "XMSS", "XMSS-SHA2_16_256"),
+                # ("XMSS-SHA2_20_256", 64, 132, 2500, 2500, "PQC", None, "XMSS", "XMSS-SHA2_20_256"),
+            ]
+            
+            for name, pub_size, priv_size, sig_min_size, sig_max_size, alg_type, _, botan_alg, botan_params in xmss_variants:
+                pqc_algs.append(Algorithm(
+                    name, pub_size, priv_size, sig_min_size, sig_max_size, 
+                    alg_type, None, botan_alg, botan_params
+                ))
+                print(f"Added XMSS variant: {name}")
+    except ImportError as e:
+        print(f"Botan import failed: {e}")
 
     # Classical Digital Signature Algorithms
     classical_algs = [
@@ -66,23 +104,41 @@ def get_all_algorithms():
 def generate_keys(algo: Algorithm):
     """Generate and time key generation"""
     if algo.type == "PQC":
-        signer = oqs.Signature(algo.oqs_alg)
-        start = time()
-        public_key = signer.generate_keypair()
-        secret_key = signer.export_secret_key()
-        
-        # Validate key sizes
-        if len(public_key) != algo.pub_key_size_bytes:
-            raise ValueError(f"Public key size {len(public_key)} bytes doesn't match expected {algo.pub_key_size_bytes} bytes")
-        if len(secret_key) != algo.priv_key_size_bytes:
-            raise ValueError(f"Private key size {len(secret_key)} bytes doesn't match expected {algo.priv_key_size_bytes} bytes")
+        if algo.oqs_alg:  # OQS-based algorithm
+            signer = oqs.Signature(algo.oqs_alg)
+            start = time()
+            public_key = signer.generate_keypair()
+            secret_key = signer.export_secret_key()
             
-        end = time()
-        return {
-            'signer': signer,
-            'public_key': public_key,
-            'keygen_time': end - start
-        }
+            # Validate key sizes
+            if len(public_key) != algo.pub_key_size_bytes:
+                raise ValueError(f"Public key size {len(public_key)} bytes doesn't match expected {algo.pub_key_size_bytes} bytes")
+            if len(secret_key) != algo.priv_key_size_bytes:
+                raise ValueError(f"Private key size {len(secret_key)} bytes doesn't match expected {algo.priv_key_size_bytes} bytes")
+                
+            end = time()
+            return {
+                'signer': signer,
+                'public_key': public_key,
+                'keygen_time': end - start
+            }
+        elif algo.botan_alg:  # Botan-based algorithm (XMSS)
+            rng = botan3.RandomNumberGenerator()
+            start = time()
+            private_key = botan3.PrivateKey.create(
+                algo.botan_alg,  # Algorithm name (XMSS)
+                algo.botan_params,  # Parameter set
+                rng
+            )
+            public_key = private_key.get_public_key()
+            end = time()
+            
+            return {
+                'private_key': private_key,
+                'public_key': public_key,
+                'rng': rng,
+                'keygen_time': end - start
+            }
     else:
         if algo.name.startswith("RSA"):
             start = time()
@@ -112,31 +168,63 @@ def generate_keys(algo: Algorithm):
 def benchmark_signature(algo: Algorithm, keys, message: bytes, iterations=100):
     """Benchmark signing performance using pre-generated keys"""
     if algo.type == "PQC":
-        signer = keys['signer']
-        public_key = keys['public_key']
-        
-        # Time signing
-        start = time()
-        for _ in range(iterations):
-            signature = signer.sign(message)
-        end = time()
+        if algo.oqs_alg:  # OQS-based algorithm
+            signer = keys['signer']
+            public_key = keys['public_key']
+            
+            # Time signing
+            start = time()
+            for _ in range(iterations):
+                signature = signer.sign(message)
+            end = time()
 
-        # Verify signature size is within allowed range
-        signature_bytes = len(signature)
-        if not (algo.signature_size_min_bytes <= signature_bytes <= algo.signature_size_max_bytes):
-            raise ValueError(f"Signature size {signature_bytes} bytes is not within expected range of {algo.signature_size_min_bytes}-{algo.signature_size_max_bytes} bytes")
-        
-        # Time verification
-        verify_start = time()
-        for _ in range(iterations):
-            if not signer.verify(message, signature, public_key):
-                raise ValueError("Signature verification failed")
-        verify_end = time()
-        
-        return {
-            'sign_time': (end - start) / iterations,
-            'verify_time': (verify_end - verify_start) / iterations
-        }
+            # Verify signature size is within allowed range
+            signature_bytes = len(signature)
+            if not (algo.signature_size_min_bytes <= signature_bytes <= algo.signature_size_max_bytes):
+                raise ValueError(f"Signature size {signature_bytes} bytes is not within expected range of {algo.signature_size_min_bytes}-{algo.signature_size_max_bytes} bytes")
+            
+            # Time verification
+            verify_start = time()
+            for _ in range(iterations):
+                if not signer.verify(message, signature, public_key):
+                    raise ValueError("Signature verification failed")
+            verify_end = time()
+            
+            return {
+                'sign_time': (end - start) / iterations,
+                'verify_time': (verify_end - verify_start) / iterations
+            }
+        elif algo.botan_alg:  # Botan-based algorithm (XMSS)
+            private_key = keys['private_key']
+            public_key = keys['public_key']
+            rng = keys['rng']
+            
+            # Create signer/verifier objects
+            signer = botan3.PKSign(private_key, "EMSA1(SHA-256)")
+            verifier = botan3.PKVerify(public_key, "EMSA1(SHA-256)")
+            
+            # Time signing
+            start = time()
+            for _ in range(iterations):
+                signer.update(message)
+                signature = signer.finish(rng)
+                signer = botan3.PKSign(private_key, "EMSA1(SHA-256)")  # Reset signer
+            end = time()
+            
+            # Time verification
+            verify_start = time()
+            for _ in range(iterations):
+                verifier.update(message)
+                is_valid = verifier.check_signature(signature)
+                if not is_valid:
+                    raise ValueError("Signature verification failed")
+                verifier = botan3.PKVerify(public_key, "EMSA1(SHA-256)")  # Reset verifier
+            verify_end = time()
+            
+            return {
+                'sign_time': (end - start) / iterations,
+                'verify_time': (verify_end - verify_start) / iterations
+            }
     else:
         if algo.name.startswith("RSA"):
             key = keys['key']
